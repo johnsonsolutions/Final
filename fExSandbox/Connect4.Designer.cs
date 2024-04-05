@@ -77,7 +77,6 @@ namespace fExSandbox
             btn22 = new Button();
             btn23 = new Button();
             btn15 = new Button();
-            btnerror = new Button();
             SuspendLayout();
             // 
             // btn50
@@ -610,25 +609,11 @@ namespace fExSandbox
             btn15.TabIndex = 45;
             btn15.UseVisualStyleBackColor = false;
             // 
-            // btnerror
-            // 
-            btnerror.BackColor = SystemColors.MenuHighlight;
-            btnerror.BackgroundImage = Properties.Resources.hole_Empty__01;
-            btnerror.BackgroundImageLayout = ImageLayout.Stretch;
-            btnerror.Location = new Point(410, 719);
-            btnerror.Margin = new Padding(3, 4, 3, 4);
-            btnerror.Name = "btnerror";
-            btnerror.Size = new Size(286, 28);
-            btnerror.TabIndex = 46;
-            btnerror.UseVisualStyleBackColor = false;
-            btnerror.Click += btnerror_Click;
-            // 
             // Connect4
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(712, 765);
-            Controls.Add(btnerror);
             Controls.Add(btn15);
             Controls.Add(btn06);
             Controls.Add(btn05);
@@ -742,23 +727,5 @@ namespace fExSandbox
         private Button btn15f;
         private Button btn23;
         private Button btn15;
-
-        /*
-        public Button GetButton(string button)
-        {
-                foreach (Button b in Controls)
-                {
-                    if (b.Name == button) 
-                    { 
-                        return b;
-                    }
-                }
-
-            btnerror.Visible = true;
-            return btnerror;
-
-        }*/
-
-        private Button btnerror;
     }
 }

@@ -47,6 +47,8 @@
                 }
             }
 
+            //Supposed to create nodes and link them to each button but its not currently working
+            // past the first pass. Working on it.
             for (y = 0; y < 7; y++)
             {
                 for (x = 0; x < 7; x++)
@@ -70,8 +72,9 @@
                 //y++;
 
             }
+            //Testing stuff
             //txtDisp.Text = "Buttons list length:" + nodes.Length;
-            txtDisp.Text = nodes[0].button.Name + ":" + nodes[0].x.ToString() + "," + nodes[0].y.ToString();
+            //txtDisp.Text = nodes[0].button.Name + ":" + nodes[0].x.ToString() + "," + nodes[0].y.ToString();
             //txtDisp.Text = nodes[1].button.Name + ":" + nodes[1].x.ToString() + "," + nodes[1].y.ToString();
         }
 
@@ -83,6 +86,7 @@
         /// <summary>
         /// Reset all buttons in the UI
         /// </summary>
+        /// **Currently needs to be updated for new buttons**
         void ResetAllBtns()
         {
             ResetBtn(btn50);
@@ -113,6 +117,7 @@
         /// <summary>
         /// Update the UI to reflect the current dot matrix
         /// </summary>
+        /// **** Needs to be updated for new buttons ****
         void UpdDisplay()
         {
             btn50.BackgroundImage = Faces[Slots[0, 0]];
@@ -303,10 +308,6 @@
 
         }
 
-        private void btnerror_Click(object sender, EventArgs e)
-        {
-            Console.WriteLine(nodes[0].ToString() + nodes[1].ToString());
-        }
     }
 
     public class WinCondition
