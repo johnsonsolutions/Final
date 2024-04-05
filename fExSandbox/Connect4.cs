@@ -1,21 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace fExSandbox
+﻿namespace fExSandbox
 {
     public partial class Connect4 : Form
     {
         public bool AI = false;
         //Images for player pieces in order [Empty, Player 1, Player 2]
         Bitmap[] Faces = new Bitmap[3] { Properties.Resources.hole_Empty__01, Properties.Resources.hole_fill__01, Properties.Resources.hole_fill__02_01 };
+        Node[] nodes = new Node[42];
 
         //Matrix Holding player dot positions
         int[,] Slots = new int[4, 4];
@@ -26,6 +16,8 @@ namespace fExSandbox
 
         private void Connect4_Load(object sender, EventArgs e)
         {
+
+
             //Load Movesets for AI interactions
             moveset[0] = () => { ColDrop(1); };
             moveset[1] = () => { ColDrop(2); };
@@ -34,6 +26,54 @@ namespace fExSandbox
 
         }
 
+        ///
+        public void InitNodes()
+        {
+            List<Button> buttons = new List<Button>();
+            //Controls.CopyTo(buttons, 0);
+            int x;
+            int y;
+            string btnname = "btn";
+            int i = 0;
+
+            // sort buttons out of the controls in the form
+            foreach (Control c in Controls)
+            {
+                if (c.Name.Contains("btn"))
+
+                {
+                    buttons.Add((Button)c);
+
+                }
+            }
+
+            for (y = 0; y < 7; y++)
+            {
+                for (x = 0; x < 7; x++)
+                {
+                    btnname += y.ToString() + x.ToString();
+                    
+                    foreach (Button b in buttons)
+                    {
+                        if (b.Name == btnname)
+                        {
+                            Node node = new Node(x, y, b);
+                            nodes[i] = node;
+                            i++;
+                        }
+                    }
+
+                    //x++;
+
+                }
+
+                //y++;
+
+            }
+            //txtDisp.Text = "Buttons list length:" + nodes.Length;
+            txtDisp.Text = nodes[0].button.Name + ":" + nodes[0].x.ToString() + "," + nodes[0].y.ToString();
+            //txtDisp.Text = nodes[1].button.Name + ":" + nodes[1].x.ToString() + "," + nodes[1].y.ToString();
+        }
 
         /// <summary>
         /// Reset a single specified button in the UI
@@ -45,22 +85,22 @@ namespace fExSandbox
         /// </summary>
         void ResetAllBtns()
         {
-            ResetBtn(btn1);
-            ResetBtn(btn2);
-            ResetBtn(btn3);
-            ResetBtn(btn4);
-            ResetBtn(btn5);
-            ResetBtn(btn6);
-            ResetBtn(btn7);
-            ResetBtn(btn8);
+            ResetBtn(btn50);
+            ResetBtn(btn51);
+            ResetBtn(btn52);
+            ResetBtn(btn53);
+            ResetBtn(btn40);
+            ResetBtn(btn41);
+            ResetBtn(btn42);
+            ResetBtn(btn43);
             ResetBtn(btn9);
-            ResetBtn(btn10);
-            ResetBtn(btn11);
-            ResetBtn(btn12);
-            ResetBtn(btn13);
-            ResetBtn(btn14);
-            ResetBtn(btn15);
-            ResetBtn(btn16);
+            ResetBtn(btn31);
+            ResetBtn(btn32);
+            ResetBtn(btn33);
+            ResetBtn(btn13f);
+            ResetBtn(btn14f);
+            ResetBtn(btn15f);
+            ResetBtn(btn23);
         }
         /// <summary>
         /// Switch between players
@@ -75,27 +115,28 @@ namespace fExSandbox
         /// </summary>
         void UpdDisplay()
         {
-            btn1.BackgroundImage = Faces[Slots[0, 0]];
-            btn2.BackgroundImage = Faces[Slots[0, 1]];
-            btn3.BackgroundImage = Faces[Slots[0, 2]];
-            btn4.BackgroundImage = Faces[Slots[0, 3]];
-            btn5.BackgroundImage = Faces[Slots[1, 0]];
-            btn6.BackgroundImage = Faces[Slots[1, 1]];
-            btn7.BackgroundImage = Faces[Slots[1, 2]];
-            btn8.BackgroundImage = Faces[Slots[1, 3]];
+            btn50.BackgroundImage = Faces[Slots[0, 0]];
+            btn51.BackgroundImage = Faces[Slots[0, 1]];
+            btn52.BackgroundImage = Faces[Slots[0, 2]];
+            btn53.BackgroundImage = Faces[Slots[0, 3]];
+            btn40.BackgroundImage = Faces[Slots[1, 0]];
+            btn41.BackgroundImage = Faces[Slots[1, 1]];
+            btn42.BackgroundImage = Faces[Slots[1, 2]];
+            btn43.BackgroundImage = Faces[Slots[1, 3]];
             btn9.BackgroundImage = Faces[Slots[2, 0]];
-            btn10.BackgroundImage = Faces[Slots[2, 1]];
-            btn11.BackgroundImage = Faces[Slots[2, 2]];
-            btn12.BackgroundImage = Faces[Slots[2, 3]];
-            btn13.BackgroundImage = Faces[Slots[3, 0]];
-            btn14.BackgroundImage = Faces[Slots[3, 1]];
-            btn15.BackgroundImage = Faces[Slots[3, 2]];
-            btn16.BackgroundImage = Faces[Slots[3, 3]];
+            btn31.BackgroundImage = Faces[Slots[2, 1]];
+            btn32.BackgroundImage = Faces[Slots[2, 2]];
+            btn33.BackgroundImage = Faces[Slots[2, 3]];
+            btn13f.BackgroundImage = Faces[Slots[3, 0]];
+            btn14f.BackgroundImage = Faces[Slots[3, 1]];
+            btn15f.BackgroundImage = Faces[Slots[3, 2]];
+            btn23.BackgroundImage = Faces[Slots[3, 3]];
         }
 
         public Connect4()
         {
             InitializeComponent();
+            InitNodes();
         }
 
         /// <summary>
@@ -255,6 +296,16 @@ namespace fExSandbox
         private void chkAI_CheckedChanged(object sender, EventArgs e)
         {
             AI = chkAI.Checked;
+        }
+
+        private void txtDisp_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnerror_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine(nodes[0].ToString() + nodes[1].ToString());
         }
     }
 
