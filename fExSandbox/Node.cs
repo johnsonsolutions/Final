@@ -5,33 +5,58 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace fExSandbox
 {
-    internal class Node<T>
+    internal class Node
     {
+        // basic node information
         public string name;
+        public int x;
+        public int y;
+        public Button button;
 
-        public T Data { get; set; }
-        public List<Node<T>> Children { get; set; }
+        /* Neighboring nodes
+            naming convention uses cardinal direction of the node in reference to the current node
+            with a lower case inital (n is North, w is West, etc..) (North or South take precendence over
+            east or west (for example: North West is nwNeighbor not wnNeighbor)*/
+        Node nNeighbor;
+        Node neNeighbor;
+        Node eNeighbor;
+        Node seNeighbor;
+        Node sNeighbor;
+        Node swNeighbor;
+        Node wNeighbor;
+        Node nwNeighbor;
 
-        public float weight;
 
-        public bool isTerminal() { return Children.Count < 1; }
+        //public  Data { get; set; }
+       /// public List<Node> Children { get; set; }
 
-        public Node(T data)
+       // public float weight;
+    
+
+       /// public bool isTerminal() { return Children.Count < 1; }
+
+        public Node(int x,int y, Button button)
         {
-            Data = data;
-            Children = new List<Node<T>>();
+            this.x = x;
+            this.y = y;
+            this.button = button;
+            //this.button = Connect4.GetButton();
+            //Data = data;
+            //Children = new List<Node<T>>();
         }
-        public void AddChild(Node<T> child)
+       /* public void AddChild(Node child)
         {
             Children.Add(child);
-        }
+        }*/
 
         /// <summary>
         /// Traverse Tree
         /// </summary>
         /// <param name="depth">Depth Traversed</param>
+        /*
         public void DFSSweep(int depth)
         {
             Console.Write($"Node Visited:{this.Data}");
@@ -40,8 +65,9 @@ namespace fExSandbox
                 child.DFSSweep(depth + 1);
             }
         }
+        */
 
-
+        /*
         public Node<T> FindNode<T>(Node<T> currentNode, T searchData)
         {
             if (currentNode.Data.Equals(searchData))
@@ -57,14 +83,15 @@ namespace fExSandbox
                 }
             }
             return null;
-        }
+        }*/
 
-        public void RemoveNode<T>(Node<T> node, Node<T> DeadNode)
+
+       /*public void RemoveNode<T>(Node<T> node, Node<T> DeadNode)
         {
             node.Children.Remove(DeadNode);
-        }
+        }*/
 
-        public float MiniMax<T>(Node<T> node, int depth, bool maximizingPlayer)
+        /*public float MiniMax<T>(Node<T> node, int depth, bool maximizingPlayer)
         {
             if (depth == 0 || isTerminal())
             {
@@ -88,7 +115,7 @@ namespace fExSandbox
                     weight = Math.Min(weight, MiniMax(child, depth - 1, true));
                 }
                 return weight;
-            }
-        }
+            }*/
+        //}
     }
 }
