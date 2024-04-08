@@ -4,25 +4,32 @@ namespace fExSandbox
 {
     public partial class Connect4 : Form
     {
+        /*Preferences*/
         public bool AI = false;
         //Images for player pieces in order [Empty, Player 1, Player 2]
         Bitmap[] Faces = new Bitmap[3] { Properties.Resources.t1_01, Properties.Resources.t2_01, Properties.Resources.t3_01 };
-        Node[] nodes = new Node[42];
 
-        //Matrix Holding player dot positions
-        int[,] Slots = new int[4, 4];
+        /*Data*/
         //Current player's turn
         int activePlayer = 1;
-
+        Node[] nodes = new Node[42];
+        //Matrix Holding player dot positions
+        int[,] Slots = new int[4, 4];
         public Delegate[] moveset = new Delegate[7];
 
+        /*UI*/
         public List<Point> gridScale = new List<Point>();
+
+        /*Controls*/
+        List<Button> btns = new List<Button>();
+
         public Connect4()
         {
             InitializeComponent();
-            scaleGrid();
-            InitNodes();
-            gridTest();
+            mockNodes();
+            //scaleGrid();
+            //InitNodes();
+            //gridTest();
             //Button tester = newBtn("nully");
             //tester.Location = new Point(50, 50);
             //this.Controls.Add(tester);
@@ -114,6 +121,39 @@ namespace fExSandbox
         /// <param name="inp">Input string</param>
         public void yell(string inp) { txtDisp.Text = inp; }
 
+
+        /// <summary>
+        /// Mockup of initNodes(); Combined with the button generation and grid scaling
+        /// </summary>
+        public void mockNodes() {
+            scaleGrid();
+            int i = 0;
+            int ev = 1;
+            for (int x = 0; x < 7; x++) {
+
+                for (int y = 0; y < 6; y++) {
+
+
+                    string btnName = "btn" + y.ToString() + x.ToString();
+                    Button button = newBtn(btnName);
+                    button.Location = gridScale[i];
+                    //button.Click += scaleGrid;
+
+                    Node node = new Node(x, y, button);
+                    nodes[i] = node;
+                    this.Controls.Add(nodes[i].button);
+
+                    i++;
+                }
+                ev++;
+            }
+
+            //Testing stuff
+            //yell("Buttons list length:" + nodes.Length);
+            //yell(nodes[0].button.Name + ":" + nodes[0].x.ToString() + "," + nodes[0].y.ToString());
+            //yell(nodes[1].button.Name + ":" + nodes[1].x.ToString() + "," + nodes[1].y.ToString());
+        }
+
         ///
         public void InitNodes()
         {
@@ -176,9 +216,9 @@ namespace fExSandbox
         /// **Currently needs to be updated for new buttons**
         void ResetAllBtns()
         {
-            for (int i = 0; i < 41; i++)
+            for (int i = 0; i <= nodes.Length; i++)
             {
-                ResetBtn((Button)this.Controls["btn" + i]);
+                ResetBtn(nodes[i].button);
             }
         }
         /// <summary>
@@ -195,22 +235,10 @@ namespace fExSandbox
         /// **** Needs to be updated for new buttons ****
         void UpdDisplay()
         {
-            //btn0.BackgroundImage = Faces[Slots[0, 0]];
-            //btn1.BackgroundImage = Faces[Slots[0, 1]];
-            //btn2.BackgroundImage = Faces[Slots[0, 2]];
-            //btn3.BackgroundImage = Faces[Slots[0, 3]];
-            //btn7.BackgroundImage = Faces[Slots[1, 0]];
-            //btn8.BackgroundImage = Faces[Slots[1, 1]];
-            //btn9.BackgroundImage = Faces[Slots[1, 2]];
-            //btn10.BackgroundImage = Faces[Slots[1, 3]];
-            //btn9.BackgroundImage = Faces[Slots[2, 0]];
-            //btn15.BackgroundImage = Faces[Slots[2, 1]];
-            //btn16.BackgroundImage = Faces[Slots[2, 2]];
-            //btn17.BackgroundImage = Faces[Slots[2, 3]];
-            //btn13f.BackgroundImage = Faces[Slots[3, 0]];
-            //btn14f.BackgroundImage = Faces[Slots[3, 1]];
-            //btn15f.BackgroundImage = Faces[Slots[3, 2]];
-            //btn24.BackgroundImage = Faces[Slots[3, 3]];
+            foreach (Node n in nodes) {
+                this.Controls.Remove(n.button);
+                this.Controls.Add(n.button);
+            }
         }
 
 
@@ -222,9 +250,6 @@ namespace fExSandbox
         /// <param name="e"></param>
         private void btnNG_Click(object sender, EventArgs e)
         {
-            //Reset Dot Matrix
-            Slots = new int[4, 4];
-            //Reset Display
             ResetAllBtns();
         }
         /// <summary>
@@ -256,6 +281,23 @@ namespace fExSandbox
                 }
                 else { txtDisp.Text = "Player " + activePlayer + "Wins!"; }
                 UpdDisplay();
+            }
+        }
+
+        void mockCDrop(int col) { 
+            int i = 0;
+            int x = col;
+            int y = 6;
+
+            for (int j = 6; j > 0; j--) {
+                i = x + (y*7);
+                if (nodes[i].player == 0) {
+                    yell("yoop");
+                    nodes[i].player = activePlayer; //update player ownership
+                    nodes[i].button.BackgroundImage = Faces[activePlayer];  //update button image
+                    break;
+                }
+                y--;
             }
         }
 
@@ -354,19 +396,19 @@ namespace fExSandbox
 
         private void col1Click(object sender, EventArgs e)
         {
-            ColDrop(1);
+            mockCDrop(1);
         }
         private void col2Click(object sender, EventArgs e)
         {
-            ColDrop(2);
+            mockCDrop(2);
         }
         private void col3Click(object sender, EventArgs e)
         {
-            ColDrop(3);
+            mockCDrop(3);
         }
         private void col4Click(object sender, EventArgs e)
         {
-            ColDrop(4);
+            mockCDrop(4);
         }
 
         private void chkAI_CheckedChanged(object sender, EventArgs e)
