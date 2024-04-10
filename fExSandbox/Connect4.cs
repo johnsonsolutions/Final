@@ -7,6 +7,7 @@
         Bitmap[] Faces = new Bitmap[3] { Properties.Resources.hole_Empty__01, Properties.Resources.hole_fill__01, Properties.Resources.hole_fill__02_01 };
         Node[] nodes = new Node[42];
 
+
         //Matrix Holding player dot positions
         int[,] Slots = new int[4, 4];
         //Current player's turn
@@ -35,6 +36,7 @@
             int y;
             string btnname = "btn";
             int i = 0;
+            //int i = 0;
 
             // sort buttons out of the controls in the form
             foreach (Control c in Controls)
@@ -53,8 +55,20 @@
             {
                 for (x = 0; x < 7; x++)
                 {
-                    btnname += y.ToString() + x.ToString();
+                    btnname = "btn" + y.ToString() + x.ToString();
                     
+
+                    for(int b = 0; b < buttons.Count; b++)
+                    {
+                        if (buttons[b].Name == btnname)
+                        {
+                            Node node = new Node(x, y, buttons[b]);
+                            nodes[i] = node;
+                            i++;
+                        }
+                     
+                    }
+                    /*
                     foreach (Button b in buttons)
                     {
                         if (b.Name == btnname)
@@ -63,19 +77,16 @@
                             nodes[i] = node;
                             i++;
                         }
-                    }
-
-                    //x++;
+                    }*/
 
                 }
 
-                //y++;
 
             }
             //Testing stuff
             //txtDisp.Text = "Buttons list length:" + nodes.Length;
             //txtDisp.Text = nodes[0].button.Name + ":" + nodes[0].x.ToString() + "," + nodes[0].y.ToString();
-            //txtDisp.Text = nodes[1].button.Name + ":" + nodes[1].x.ToString() + "," + nodes[1].y.ToString();
+           txtDisp.Text = nodes[1].button.Name + ":" + nodes[1].x.ToString() + "," + nodes[1].y.ToString();
         }
 
         /// <summary>
