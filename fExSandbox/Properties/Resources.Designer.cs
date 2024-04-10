@@ -73,6 +73,26 @@ namespace fExSandbox.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap bubble1_01 {
+            get {
+                object obj = ResourceManager.GetObject("bubble1-01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap bubble2 {
+            get {
+                object obj = ResourceManager.GetObject("bubble2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap DAVINCI_1712499043055 {
             get {
                 object obj = ResourceManager.GetObject("DAVINCI_1712499043055", resourceCulture);

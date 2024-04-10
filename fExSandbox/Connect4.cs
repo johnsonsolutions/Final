@@ -1,4 +1,5 @@
 ﻿using fExSandbox.Properties;
+using System.Security.Cryptography.X509Certificates;
 
 namespace fExSandbox
 {
@@ -15,7 +16,10 @@ namespace fExSandbox
         Node[] nodes = new Node[42];
         //Matrix Holding player dot positions
         int[,] Slots = new int[4, 4];
+
+        //Event Handling
         public Delegate[] moveset = new Delegate[7];
+        public event EventHandler cHandle;
 
         /*UI*/
         public List<Point> gridScale = new List<Point>();
@@ -26,6 +30,7 @@ namespace fExSandbox
         public Connect4()
         {
             InitializeComponent();
+
             mockNodes();
             //scaleGrid();
             //InitNodes();
@@ -37,6 +42,14 @@ namespace fExSandbox
             //this.Controls["btn50"].Text = "here";
 
         }
+        public void initMoveset()
+        {
+            for (int i = 0; i < moveset.Length; i++)
+            {
+                moveset[i] = mockCDrop;
+            }
+        }
+
         /// <summary>
         /// Test Grid generation
         /// </summary>
@@ -54,8 +67,9 @@ namespace fExSandbox
         /// </summary>
         public void scaleGrid()
         {
+            int yPos = 55;
             int fac = 86;
-            Point current = new Point(12, 12);
+            Point current = new Point(12, yPos);
 
             for (int x = 0; x < 7; x++)
             {
@@ -65,7 +79,7 @@ namespace fExSandbox
                     current.Y += fac;
                 }
                 current.X += fac;
-                current.Y = 12;
+                current.Y = yPos;
             }
         }
 
@@ -125,19 +139,23 @@ namespace fExSandbox
         /// <summary>
         /// Mockup of initNodes(); Combined with the button generation and grid scaling
         /// </summary>
-        public void mockNodes() {
+        public void mockNodes()
+        {
             scaleGrid();
             int i = 0;
             int ev = 1;
-            for (int x = 0; x < 7; x++) {
+            for (int x = 0; x < 7; x++)
+            {
 
-                for (int y = 0; y < 6; y++) {
+                for (int y = 0; y < 6; y++)
+                {
 
 
                     string btnName = "btn" + y.ToString() + x.ToString();
                     Button button = newBtn(btnName);
                     button.Location = gridScale[i];
-                    //button.Click += scaleGrid;
+
+                    button.Click += (EventHandler)moveset[x];
 
                     Node node = new Node(x, y, button);
                     nodes[i] = node;
@@ -210,6 +228,11 @@ namespace fExSandbox
         /// </summary>
         /// <param name="b">Button being reset</param>
         void ResetBtn(Button b) { b.BackgroundImage = Faces[0]; }
+
+        void RmvBtn(Button b)
+        {
+            this.Controls.Remove(nodes[0].button);
+        }
         /// <summary>
         /// Reset all buttons in the UI
         /// </summary>
@@ -218,7 +241,7 @@ namespace fExSandbox
         {
             for (int i = 0; i <= nodes.Length; i++)
             {
-                ResetBtn(nodes[i].button);
+                RmvBtn(nodes[i].button);
             }
         }
         /// <summary>
@@ -235,13 +258,12 @@ namespace fExSandbox
         /// **** Needs to be updated for new buttons ****
         void UpdDisplay()
         {
-            foreach (Node n in nodes) {
+            foreach (Node n in nodes)
+            {
                 this.Controls.Remove(n.button);
                 this.Controls.Add(n.button);
             }
         }
-
-
 
         /// <summary>
         /// New game button: Resets the matrix and UI
@@ -284,14 +306,17 @@ namespace fExSandbox
             }
         }
 
-        void mockCDrop(int col) { 
+        void mockCDrop(int col)
+        {
             int i = 0;
             int x = col;
             int y = 6;
 
-            for (int j = 6; j > 0; j--) {
-                i = x + (y*7);
-                if (nodes[i].player == 0) {
+            for (int j = 6; j > 0; j--)
+            {
+                i = x + (y * 7);
+                if (nodes[i].player == 0)
+                {
                     yell("yoop");
                     nodes[i].player = activePlayer; //update player ownership
                     nodes[i].button.BackgroundImage = Faces[activePlayer];  //update button image
