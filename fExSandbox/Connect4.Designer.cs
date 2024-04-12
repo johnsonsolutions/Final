@@ -106,7 +106,7 @@ namespace fExSandbox
             // 
             // Connect4
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
             BackgroundImage = Properties.Resources.DAVINCI_1712499043055;
