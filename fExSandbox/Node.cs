@@ -15,6 +15,7 @@ namespace fExSandbox
         public int x;
         public int y;
         public Button button;
+        public int player;
 
         /* Neighboring nodes
             naming convention uses cardinal direction of the node in reference to the current node

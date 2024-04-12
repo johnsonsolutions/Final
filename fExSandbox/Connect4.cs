@@ -1,18 +1,125 @@
-﻿namespace fExSandbox
+﻿using fExSandbox.Properties;
+using System.Security.Cryptography.X509Certificates;
+
+namespace fExSandbox
 {
     public partial class Connect4 : Form
     {
+        /*Preferences*/
         public bool AI = false;
         //Images for player pieces in order [Empty, Player 1, Player 2]
-        Bitmap[] Faces = new Bitmap[3] { Properties.Resources.hole_Empty__01, Properties.Resources.hole_fill__01, Properties.Resources.hole_fill__02_01 };
-        Node[] nodes = new Node[42];
+        Bitmap[] Faces = new Bitmap[3] { Properties.Resources.t1_01, Properties.Resources.t2_01, Properties.Resources.t3_01 };
 
-        //Matrix Holding player dot positions
-        int[,] Slots = new int[4, 4];
+        /*Data*/
         //Current player's turn
         int activePlayer = 1;
+        Node[] nodes = new Node[42];
+        //Matrix Holding player dot positions
+        int[,] Slots = new int[4, 4];
 
-        public Delegate[] moveset = new Delegate[4];
+        //Event Handling
+        public Delegate[] moveset = new Delegate[7];
+        public event EventHandler cHandle;
+
+        /*UI*/
+        public List<Point> gridScale = new List<Point>();
+
+        /*Controls*/
+        List<Button> btns = new List<Button>();
+
+        public Connect4()
+        {
+            InitializeComponent();
+
+            mockNodes();
+            //scaleGrid();
+            //InitNodes();
+            //gridTest();
+            //Button tester = newBtn("nully");
+            //tester.Location = new Point(50, 50);
+            //this.Controls.Add(tester);
+
+            //this.Controls["btn50"].Text = "here";
+
+        }
+        public void initMoveset()
+        {
+            for (int i = 0; i < moveset.Length; i++)
+            {
+                moveset[i] = mockCDrop;
+            }
+        }
+
+        /// <summary>
+        /// Test Grid generation
+        /// </summary>
+        void gridTest()
+        {
+            Button[] nGrid = newGrid();
+
+            for (int i = 0; i < 42; i++)
+            {
+                this.Controls.Add(nGrid[i]);
+            }
+        }
+        /// <summary>
+        /// Generates spaced-out button locations
+        /// </summary>
+        public void scaleGrid()
+        {
+            int yPos = 55;
+            int fac = 86;
+            Point current = new Point(12, yPos);
+
+            for (int x = 0; x < 7; x++)
+            {
+                for (int y = 0; y < 6; y++)
+                {
+                    gridScale.Add(current);
+                    current.Y += fac;
+                }
+                current.X += fac;
+                current.Y = yPos;
+            }
+        }
+
+        /// <summary>
+        /// Returns a new formatted button
+        /// </summary>
+        /// <param name="name">Button name/param>
+        /// <returns>Formatted Button</returns>
+        public Button newBtn(string name)
+        {
+            Button spawn = new Button();
+
+            spawn.Name = name;
+            spawn.BackColor = Color.Transparent;
+            spawn.BackgroundImage = Properties.Resources.t1_01;
+            spawn.BackgroundImageLayout = ImageLayout.Stretch;
+            spawn.FlatAppearance.BorderSize = 0;
+            spawn.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            spawn.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            spawn.FlatStyle = FlatStyle.Flat;
+            spawn.Name = name;
+            spawn.Size = new Size(80, 80);
+            spawn.TabIndex = 1;
+            spawn.UseVisualStyleBackColor = false;
+            return spawn;
+        }
+
+        public Button[] newGrid()
+        {
+            List<Button> grid = new List<Button>();
+
+            for (int i = 0; i < 42; i++)
+            {
+                Button spawn = newBtn("btn" + i);
+                spawn.Location = gridScale[i];
+                grid.Add(spawn);
+            }
+
+            return grid.ToArray();
+        }
 
         private void Connect4_Load(object sender, EventArgs e)
         {
@@ -23,7 +130,48 @@
             moveset[1] = () => { ColDrop(2); };
             moveset[2] = () => { ColDrop(3); };
             moveset[3] = () => { ColDrop(4); };
+        }
+        /// <summary>
+        /// Print a string to the display
+        /// </summary>
+        /// <param name="inp">Input string</param>
+        public void yell(string inp) { txtDisp.Text = inp; }
 
+
+        /// <summary>
+        /// Mockup of initNodes(); Combined with the button generation and grid scaling
+        /// </summary>
+        public void mockNodes()
+        {
+            scaleGrid();
+            int i = 0;
+            int ev = 1;
+            for (int x = 0; x < 7; x++)
+            {
+
+                for (int y = 0; y < 6; y++)
+                {
+
+
+                    string btnName = "btn" + y.ToString() + x.ToString();
+                    Button button = newBtn(btnName);
+                    button.Location = gridScale[i];
+
+                    button.Click += (EventHandler)moveset[x];
+
+                    Node node = new Node(x, y, button);
+                    nodes[i] = node;
+                    this.Controls.Add(nodes[i].button);
+
+                    i++;
+                }
+                ev++;
+            }
+
+            //Testing stuff
+            //yell("Buttons list length:" + nodes.Length);
+            //yell(nodes[0].button.Name + ":" + nodes[0].x.ToString() + "," + nodes[0].y.ToString());
+            //yell(nodes[1].button.Name + ":" + nodes[1].x.ToString() + "," + nodes[1].y.ToString());
         }
 
         ///
@@ -31,16 +179,13 @@
         {
             List<Button> buttons = new List<Button>();
             //Controls.CopyTo(buttons, 0);
-            int x;
-            int y;
-            string btnname = "btn";
+            int px, py = 0;
             int i = 0;
 
             // sort buttons out of the controls in the form
             foreach (Control c in Controls)
             {
                 if (c.Name.Contains("btn"))
-
                 {
                     buttons.Add((Button)c);
 
@@ -49,12 +194,14 @@
 
             //Supposed to create nodes and link them to each button but its not currently working
             // past the first pass. Working on it.
-            for (y = 0; y < 7; y++)
+            for (int y = 0; y < 7; y++)
             {
-                for (x = 0; x < 7; x++)
+                py = y;
+                for (int x = 0; x < 7; x++)
                 {
-                    btnname += y.ToString() + x.ToString();
-                    
+                    px = x;
+                    string btnname = "btn" + y.ToString() + x.ToString();
+
                     foreach (Button b in buttons)
                     {
                         if (b.Name == btnname)
@@ -73,9 +220,9 @@
 
             }
             //Testing stuff
-            //txtDisp.Text = "Buttons list length:" + nodes.Length;
-            //txtDisp.Text = nodes[0].button.Name + ":" + nodes[0].x.ToString() + "," + nodes[0].y.ToString();
-            //txtDisp.Text = nodes[1].button.Name + ":" + nodes[1].x.ToString() + "," + nodes[1].y.ToString();
+            //yell("Buttons list length:" + nodes.Length);
+            //yell(nodes[0].button.Name + ":" + nodes[0].x.ToString() + "," + nodes[0].y.ToString());
+            //yell(nodes[1].button.Name + ":" + nodes[1].x.ToString() + "," + nodes[1].y.ToString());
         }
 
         /// <summary>
@@ -83,28 +230,21 @@
         /// </summary>
         /// <param name="b">Button being reset</param>
         void ResetBtn(Button b) { b.BackgroundImage = Faces[0]; }
+
+        void RmvBtn(Button b)
+        {
+            this.Controls.Remove(nodes[0].button);
+        }
         /// <summary>
         /// Reset all buttons in the UI
         /// </summary>
         /// **Currently needs to be updated for new buttons**
         void ResetAllBtns()
         {
-            ResetBtn(btn50);
-            ResetBtn(btn51);
-            ResetBtn(btn52);
-            ResetBtn(btn53);
-            ResetBtn(btn40);
-            ResetBtn(btn41);
-            ResetBtn(btn42);
-            ResetBtn(btn43);
-            ResetBtn(btn9);
-            ResetBtn(btn31);
-            ResetBtn(btn32);
-            ResetBtn(btn33);
-            ResetBtn(btn13f);
-            ResetBtn(btn14f);
-            ResetBtn(btn15f);
-            ResetBtn(btn23);
+            for (int i = 0; i <= nodes.Length; i++)
+            {
+                RmvBtn(nodes[i].button);
+            }
         }
         /// <summary>
         /// Switch between players
@@ -120,28 +260,11 @@
         /// **** Needs to be updated for new buttons ****
         void UpdDisplay()
         {
-            btn50.BackgroundImage = Faces[Slots[0, 0]];
-            btn51.BackgroundImage = Faces[Slots[0, 1]];
-            btn52.BackgroundImage = Faces[Slots[0, 2]];
-            btn53.BackgroundImage = Faces[Slots[0, 3]];
-            btn40.BackgroundImage = Faces[Slots[1, 0]];
-            btn41.BackgroundImage = Faces[Slots[1, 1]];
-            btn42.BackgroundImage = Faces[Slots[1, 2]];
-            btn43.BackgroundImage = Faces[Slots[1, 3]];
-            btn9.BackgroundImage = Faces[Slots[2, 0]];
-            btn31.BackgroundImage = Faces[Slots[2, 1]];
-            btn32.BackgroundImage = Faces[Slots[2, 2]];
-            btn33.BackgroundImage = Faces[Slots[2, 3]];
-            btn13f.BackgroundImage = Faces[Slots[3, 0]];
-            btn14f.BackgroundImage = Faces[Slots[3, 1]];
-            btn15f.BackgroundImage = Faces[Slots[3, 2]];
-            btn23.BackgroundImage = Faces[Slots[3, 3]];
-        }
-
-        public Connect4()
-        {
-            InitializeComponent();
-            InitNodes();
+            foreach (Node n in nodes)
+            {
+                this.Controls.Remove(n.button);
+                this.Controls.Add(n.button);
+            }
         }
 
         /// <summary>
@@ -151,9 +274,6 @@
         /// <param name="e"></param>
         private void btnNG_Click(object sender, EventArgs e)
         {
-            //Reset Dot Matrix
-            Slots = new int[4, 4];
-            //Reset Display
             ResetAllBtns();
         }
         /// <summary>
@@ -185,6 +305,26 @@
                 }
                 else { txtDisp.Text = "Player " + activePlayer + "Wins!"; }
                 UpdDisplay();
+            }
+        }
+
+        void mockCDrop(int col)
+        {
+            int i = 0;
+            int x = col;
+            int y = 6;
+
+            for (int j = 6; j > 0; j--)
+            {
+                i = x + (y * 7);
+                if (nodes[i].player == 0)
+                {
+                    yell("yoop");
+                    nodes[i].player = activePlayer; //update player ownership
+                    nodes[i].button.BackgroundImage = Faces[activePlayer];  //update button image
+                    break;
+                }
+                y--;
             }
         }
 
@@ -283,19 +423,19 @@
 
         private void col1Click(object sender, EventArgs e)
         {
-            ColDrop(1);
+            mockCDrop(1);
         }
         private void col2Click(object sender, EventArgs e)
         {
-            ColDrop(2);
+            mockCDrop(2);
         }
         private void col3Click(object sender, EventArgs e)
         {
-            ColDrop(3);
+            mockCDrop(3);
         }
         private void col4Click(object sender, EventArgs e)
         {
-            ColDrop(4);
+            mockCDrop(4);
         }
 
         private void chkAI_CheckedChanged(object sender, EventArgs e)
@@ -308,36 +448,41 @@
 
         }
 
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void btnHoverCancel(object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            button.BackColor = Color.Transparent;
+        }
     }
 
     public class WinCondition
     {
-        List<intVec2> positions = new List<intVec2>();
+        List<Point> positions = new List<Point>();
         public WinCondition()
         {
 
         }
         public void Add(int y, int x)
         {
-            positions.Add(new intVec2(y, x));
+            positions.Add(new Point(y, x));
         }
         public bool Confirmed(int player, int[,] matrix)
         {
             bool found = true;
 
-            foreach (intVec2 cord in positions)
-            { 
+            foreach (Point cord in positions)
+            {
                 if (matrix[cord.X, cord.Y] != player) { found = false; }
             }
 
             return found;
         }
 
-        public class intVec2 { 
-            public int X = 0;
-            public int Y = 0;
-            public intVec2() { }
-            public intVec2(int x, int y) { X = x; Y = y; }
-        }
     }
+
 }
