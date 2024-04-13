@@ -670,62 +670,77 @@ namespace fExSandbox
 
         #endregion
 
+        //row 1
         public Button btn50;
         private Button btn51;
         private Button btn52;
         private Button btn53;
+        private Button btn54;
+        private Button btn55;
+        private Button btn56;
+        
+        //row 2
+        private Button btn40;
+        private Button btn41;
+        private Button btn42;
+        private Button btn43;
+        private Button btn44;
+        private Button btn45;
+        private Button btn46;
+
+        //row 3
+        private Button btn30;
+        private Button btn31;
+        private Button btn32;
+        private Button btn33;
+        private Button btn34;
+        private Button btn35;
+        private Button btn36;
+
+        //row 4
+        private Button btn20;
+        private Button btn21;
+        private Button btn22;
+        private Button btn23;
+        private Button btn24;
+        private Button btn25;
+        private Button btn26;
+        
+        //row 5
+        private Button btn10;
+        private Button btn11;
+        private Button btn12;
+        private Button btn13;
+        private Button btn14;
+        private Button btn15;
+        private Button btn16;
+
+        //row 6
+        private Button btn00;
+        private Button btn01;
+        private Button btn02;
+        private Button btn03;
+        private Button btn04;
+        private Button btn05;
+        private Button btn06;
+
+        //game buttons
         private Button btnNG;
         private TextBox txtDisp;
         private CheckBox chkAI;
-        private Button btn56;
-        private Button btn55;
-        private Button btn54;
-        private Button btn46;
-        private Button btn45;
-        private Button btn44;
-        private Button btn36;
-        private Button btn35;
-        private Button btn34;
-        private Button btn26;
-        private Button btn25;
-        private Button btn24;
-        private Button btn16;
+
+        //other buttons
         private Button button10;
         private Button button11;
         private Button button12;
         private Button button13;
         private Button button14;
-        private Button btn14;
-        private Button btn13;
-        private Button btn12;
-        private Button btn11;
         private Button button16;
         private Button button17;
         private Button button18;
-        private Button btn10;
-        private Button btn06;
-        private Button btn05;
-        private Button btn04;
-        private Button btn03;
-        private Button btn02;
-        private Button btn01;
-        private Button btn00;
-        private Button btn40;
-        private Button btn41;
-        private Button btn42;
-        private Button btn43;
-        private Button btn30;
         private Button btn9;
-        private Button btn31;
-        private Button btn32;
-        private Button btn33;
-        private Button btn20;
-        private Button btn21;
-        private Button btn22;
         private Button btn13f;
         private Button btn14f;
         private Button btn15f;
-        private Button btn23;
-        private Button btn15;
     }
 }
