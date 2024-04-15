@@ -37,6 +37,7 @@ namespace fExSandbox
             chkAI = new CheckBox();
             btnClose = new Button();
             txtDisp = new Label();
+            btnInfo = new Button();
             SuspendLayout();
             // 
             // btnNG
@@ -58,7 +59,7 @@ namespace fExSandbox
             btnNG.Click += btnNG_Click;
             btnNG.MouseHover += btnHoverCancel;
             // 
-            // btn15
+            // chkAI
             // 
             chkAI.AutoSize = true;
             chkAI.BackColor = Color.Transparent;
@@ -104,6 +105,21 @@ namespace fExSandbox
             txtDisp.Text = "Connect 4";
             txtDisp.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // btnInfo
+            // 
+            btnInfo.BackColor = Color.Transparent;
+            btnInfo.BackgroundImageLayout = ImageLayout.Stretch;
+            btnInfo.FlatAppearance.BorderSize = 0;
+            btnInfo.FlatStyle = FlatStyle.Flat;
+            btnInfo.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point);
+            btnInfo.ForeColor = Color.Beige;
+            btnInfo.Location = new Point(571, 6);
+            btnInfo.Name = "btnInfo";
+            btnInfo.Size = new Size(40, 40);
+            btnInfo.TabIndex = 48;
+            btnInfo.Text = "!";
+            btnInfo.UseVisualStyleBackColor = false;
+            // 
             // Connect4
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -112,6 +128,7 @@ namespace fExSandbox
             BackgroundImage = Properties.Resources.DAVINCI_1712499043055;
             ClientSize = new Size(623, 608);
             ControlBox = false;
+            Controls.Add(btnInfo);
             Controls.Add(txtDisp);
             Controls.Add(chkAI);
             Controls.Add(btnClose);
@@ -201,5 +218,8 @@ namespace fExSandbox
         private Button btn13f;
         private Button btn14f;
         private Button btn15f;
+        private Button btnClose;
+        private Label txtDisp;
+        private Button btnInfo;
     }
 }
