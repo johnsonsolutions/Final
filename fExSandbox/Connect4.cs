@@ -30,6 +30,12 @@ namespace fExSandbox
         public Connect4()
         {
             InitializeComponent();
+            InitNodes();
+            //foreach (Node n in nodes)
+            //{
+            //    this.Controls.Remove(n.button);
+            //    this.Controls.Add(n.button);
+            //}
 
             mockNodes();
             //scaleGrid();
@@ -277,7 +283,7 @@ namespace fExSandbox
             btn44.BackgroundImage = Faces[Slots[1, 4]];
             btn45.BackgroundImage = Faces[Slots[1, 5]];
             btn46.BackgroundImage = Faces[Slots[1, 6]];
-            
+
             //row 3
             btn30.BackgroundImage = Faces[Slots[2, 0]];
             btn31.BackgroundImage = Faces[Slots[2, 1]];
@@ -318,17 +324,6 @@ namespace fExSandbox
             btn14f.BackgroundImage = Faces[Slots[3, 1]];
             btn15f.BackgroundImage = Faces[Slots[3, 2]];
             btn23.BackgroundImage = Faces[Slots[3, 3]];*/
-        }
-
-        public Connect4()
-        {
-            InitializeComponent();
-            InitNodes();
-            foreach (Node n in nodes)
-            {
-                this.Controls.Remove(n.button);
-                this.Controls.Add(n.button);
-            }
         }
 
         /// <summary>
@@ -521,6 +516,12 @@ namespace fExSandbox
         {
             Button button = (Button)sender;
             button.BackColor = Color.Transparent;
+        }
+
+        private void btnInfo_Click(object sender, EventArgs e)
+        {
+            Form abt = new abtBox();
+            abt.ShowDialog();
         }
     }
 

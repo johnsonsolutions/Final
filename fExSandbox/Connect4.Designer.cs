@@ -110,6 +110,8 @@ namespace fExSandbox
             btnInfo.BackColor = Color.Transparent;
             btnInfo.BackgroundImageLayout = ImageLayout.Stretch;
             btnInfo.FlatAppearance.BorderSize = 0;
+            btnInfo.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            btnInfo.FlatAppearance.MouseOverBackColor = Color.Transparent;
             btnInfo.FlatStyle = FlatStyle.Flat;
             btnInfo.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point);
             btnInfo.ForeColor = Color.Beige;
@@ -119,6 +121,7 @@ namespace fExSandbox
             btnInfo.TabIndex = 48;
             btnInfo.Text = "!";
             btnInfo.UseVisualStyleBackColor = false;
+            btnInfo.Click += btnInfo_Click;
             // 
             // Connect4
             // 
@@ -154,7 +157,7 @@ namespace fExSandbox
         private Button btn54;
         private Button btn55;
         private Button btn56;
-        
+
         //row 2
         private Button btn40;
         private Button btn41;
@@ -181,7 +184,7 @@ namespace fExSandbox
         private Button btn24;
         private Button btn25;
         private Button btn26;
-        
+
         //row 5
         private Button btn10;
         private Button btn11;
@@ -202,7 +205,7 @@ namespace fExSandbox
 
         //game buttons
         private Button btnNG;
-        private TextBox txtDisp;
+        private Label txtDisp;
         private CheckBox chkAI;
 
         //other buttons
@@ -219,7 +222,6 @@ namespace fExSandbox
         private Button btn14f;
         private Button btn15f;
         private Button btnClose;
-        private Label txtDisp;
         private Button btnInfo;
     }
 }
