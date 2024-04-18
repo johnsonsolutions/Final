@@ -18,6 +18,9 @@ namespace fExSandbox
         int[,] Slots = new int[4, 4];
 
         //Event Handling
+        public delegate void dropHandler(int col);
+        public event dropHandler? Drop;
+
         public Delegate[] moveset = new Delegate[7];
         public event EventHandler cHandle;
 
@@ -30,30 +33,15 @@ namespace fExSandbox
         public Connect4()
         {
             InitializeComponent();
-            InitNodes();
-            //foreach (Node n in nodes)
-            //{
-            //    this.Controls.Remove(n.button);
-            //    this.Controls.Add(n.button);
-            //}
+            initMoveset();
 
-            mockNodes();
-            //scaleGrid();
             //InitNodes();
-            //gridTest();
-            //Button tester = newBtn("nully");
-            //tester.Location = new Point(50, 50);
-            //this.Controls.Add(tester);
-
-            //this.Controls["btn50"].Text = "here";
+            mockNodes();
 
         }
         public void initMoveset()
         {
-            for (int i = 0; i < moveset.Length; i++)
-            {
-                moveset[i] = mockCDrop;
-            }
+            Drop += mockCDrop;
         }
 
         /// <summary>
@@ -158,12 +146,12 @@ namespace fExSandbox
                 for (int y = 0; y < 6; y++)
                 {
 
-
+                    yell($"{x}, {y}");
                     string btnName = "btn" + y.ToString() + x.ToString();
                     Button button = newBtn(btnName);
                     button.Location = gridScale[i];
 
-                    button.Click += (EventHandler)moveset[x];
+                    button.Click += (sender, e)=> { Drop?.Invoke(x); };
 
                     Node node = new Node(x, y, button);
                     nodes[i] = node;
@@ -260,71 +248,7 @@ namespace fExSandbox
             if (activePlayer == 1) { activePlayer = 2; }
             else { activePlayer = 1; }
         }
-        /// <summary>
-        /// Update the UI to reflect the current dot matrix
-        /// </summary>
-        /// **** Needs to be updated for new buttons ****
-        void UpdDisplay()
-        {
-            //row 1
-            btn50.BackgroundImage = Faces[Slots[0, 0]];
-            btn51.BackgroundImage = Faces[Slots[0, 1]];
-            btn52.BackgroundImage = Faces[Slots[0, 2]];
-            btn53.BackgroundImage = Faces[Slots[0, 3]];
-            btn54.BackgroundImage = Faces[Slots[0, 4]];
-            btn55.BackgroundImage = Faces[Slots[0, 5]];
-            btn56.BackgroundImage = Faces[Slots[0, 6]];
 
-            //row 2
-            btn40.BackgroundImage = Faces[Slots[1, 0]];
-            btn41.BackgroundImage = Faces[Slots[1, 1]];
-            btn42.BackgroundImage = Faces[Slots[1, 2]];
-            btn43.BackgroundImage = Faces[Slots[1, 3]];
-            btn44.BackgroundImage = Faces[Slots[1, 4]];
-            btn45.BackgroundImage = Faces[Slots[1, 5]];
-            btn46.BackgroundImage = Faces[Slots[1, 6]];
-
-            //row 3
-            btn30.BackgroundImage = Faces[Slots[2, 0]];
-            btn31.BackgroundImage = Faces[Slots[2, 1]];
-            btn32.BackgroundImage = Faces[Slots[2, 2]];
-            btn33.BackgroundImage = Faces[Slots[2, 3]];
-            btn34.BackgroundImage = Faces[Slots[2, 4]];
-            btn35.BackgroundImage = Faces[Slots[2, 5]];
-            btn36.BackgroundImage = Faces[Slots[2, 6]];
-
-            //row 4
-            btn20.BackgroundImage = Faces[Slots[3, 0]];
-            btn21.BackgroundImage = Faces[Slots[3, 1]];
-            btn22.BackgroundImage = Faces[Slots[3, 2]];
-            btn23.BackgroundImage = Faces[Slots[3, 3]];
-            btn24.BackgroundImage = Faces[Slots[3, 4]];
-            btn25.BackgroundImage = Faces[Slots[3, 5]];
-            btn26.BackgroundImage = Faces[Slots[3, 6]];
-
-            //row 4
-            btn10.BackgroundImage = Faces[Slots[4, 0]];
-            btn11.BackgroundImage = Faces[Slots[4, 1]];
-            btn12.BackgroundImage = Faces[Slots[4, 2]];
-            btn13.BackgroundImage = Faces[Slots[4, 3]];
-            btn14.BackgroundImage = Faces[Slots[4, 4]];
-            btn15.BackgroundImage = Faces[Slots[4, 5]];
-            btn16.BackgroundImage = Faces[Slots[4, 6]];
-
-            //row 4
-            btn00.BackgroundImage = Faces[Slots[5, 0]];
-            btn01.BackgroundImage = Faces[Slots[5, 1]];
-            btn02.BackgroundImage = Faces[Slots[5, 2]];
-            btn03.BackgroundImage = Faces[Slots[5, 3]];
-            btn04.BackgroundImage = Faces[Slots[5, 4]];
-            btn05.BackgroundImage = Faces[Slots[5, 5]];
-            btn06.BackgroundImage = Faces[Slots[5, 6]];
-            /*
-            btn13f.BackgroundImage = Faces[Slots[3, 0]];
-            btn14f.BackgroundImage = Faces[Slots[3, 1]];
-            btn15f.BackgroundImage = Faces[Slots[3, 2]];
-            btn23.BackgroundImage = Faces[Slots[3, 3]];*/
-        }
 
         /// <summary>
         /// New game button: Resets the matrix and UI
@@ -363,7 +287,7 @@ namespace fExSandbox
                     txtDisp.Text = "Player " + activePlayer + "s Turn!";
                 }
                 else { txtDisp.Text = "Player " + activePlayer + "Wins!"; }
-                UpdDisplay();
+                //UpdDisplay();
             }
         }
 
