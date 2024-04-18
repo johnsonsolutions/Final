@@ -1,4 +1,5 @@
 ﻿using fExSandbox.Properties;
+using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
 
 namespace fExSandbox
@@ -14,15 +15,10 @@ namespace fExSandbox
         //Current player's turn
         int activePlayer = 1;
         Node[] nodes = new Node[42];
-        //Matrix Holding player dot positions
-        int[,] Slots = new int[4, 4];
 
         //Event Handling
         public delegate void dropHandler(int col);
         public event dropHandler? Drop;
-
-        public Delegate[] moveset = new Delegate[7];
-        public event EventHandler cHandle;
 
         /*UI*/
         public List<Point> gridScale = new List<Point>();
@@ -37,7 +33,6 @@ namespace fExSandbox
 
             //InitNodes();
             mockNodes();
-
         }
         public void initMoveset()
         {
@@ -115,21 +110,15 @@ namespace fExSandbox
             return grid.ToArray();
         }
 
-        private void Connect4_Load(object sender, EventArgs e)
-        {
-
-
-            //Load Movesets for AI interactions
-            moveset[0] = () => { ColDrop(1); };
-            moveset[1] = () => { ColDrop(2); };
-            moveset[2] = () => { ColDrop(3); };
-            moveset[3] = () => { ColDrop(4); };
-        }
         /// <summary>
         /// Print a string to the display
         /// </summary>
         /// <param name="inp">Input string</param>
-        public void yell(string inp) { txtDisp.Text = inp; }
+        public void yell(string inp)
+        {
+            //txtDisp.Text = inp;
+            Debug.WriteLine(inp);
+        }
 
 
         /// <summary>
@@ -145,13 +134,11 @@ namespace fExSandbox
 
                 for (int y = 0; y < 6; y++)
                 {
-
-                    yell($"{x}, {y}");
                     string btnName = "btn" + y.ToString() + x.ToString();
                     Button button = newBtn(btnName);
                     button.Location = gridScale[i];
 
-                    button.Click += (sender, e)=> { Drop?.Invoke(x); };
+                    button.Click += (sender, e) => { Drop?.Invoke(x); };
 
                     Node node = new Node(x, y, button);
                     nodes[i] = node;
@@ -163,9 +150,7 @@ namespace fExSandbox
             }
 
             //Testing stuff
-            //yell("Buttons list length:" + nodes.Length);
-            //yell(nodes[0].button.Name + ":" + nodes[0].x.ToString() + "," + nodes[0].y.ToString());
-            //yell(nodes[1].button.Name + ":" + nodes[1].x.ToString() + "," + nodes[1].y.ToString());
+            //yell($"Button list length: {nodes.Length}\n\n{nodes[0].x}, {nodes[0].y}\n\n{nodes[1].x}, {nodes[1].y}");
         }
 
         ///
@@ -225,10 +210,7 @@ namespace fExSandbox
         /// <param name="b">Button being reset</param>
         void ResetBtn(Button b) { b.BackgroundImage = Faces[0]; }
 
-        void RmvBtn(Button b)
-        {
-            this.Controls.Remove(nodes[0].button);
-        }
+        void RmvBtn(Button b) { this.Controls.Remove(nodes[0].button); }
         /// <summary>
         /// Reset all buttons in the UI
         /// </summary>
@@ -255,41 +237,39 @@ namespace fExSandbox
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnNG_Click(object sender, EventArgs e)
-        {
-            ResetAllBtns();
-        }
+        private void btnNG_Click(object sender, EventArgs e) { ResetAllBtns(); }
+
         /// <summary>
         /// Drops the activePlayers' peice into the board in a specified column.
         /// </summary>
         /// <param name="column"></param>
-        void ColDrop(int column)
-        {
-            if (Winner() == 0)
-            {
-                int aCol = column - 1;
+        //void ColDrop(int column)
+        //{
+        //    if (Winner() == 0)
+        //    {
+        //        int aCol = column - 1;
 
-                for (int i = 3; i >= 0; i--)
-                {
-                    if (Slots[i, aCol] > 0)
-                    {
-                        txtDisp.Text += "-filled-";
-                    }
-                    else
-                    {
-                        Slots[i, aCol] = activePlayer;
-                        break;
-                    }
-                }
-                if (!isWinner(activePlayer))
-                {
-                    playerTog();
-                    txtDisp.Text = "Player " + activePlayer + "s Turn!";
-                }
-                else { txtDisp.Text = "Player " + activePlayer + "Wins!"; }
-                //UpdDisplay();
-            }
-        }
+        //        for (int i = 3; i >= 0; i--)
+        //        {
+        //            if (Slots[i, aCol] > 0)
+        //            {
+        //                txtDisp.Text += "-filled-";
+        //            }
+        //            else
+        //            {
+        //                Slots[i, aCol] = activePlayer;
+        //                break;
+        //            }
+        //        }
+        //        if (!isWinner(activePlayer))
+        //        {
+        //            playerTog();
+        //            txtDisp.Text = "Player " + activePlayer + "s Turn!";
+        //        }
+        //        else { txtDisp.Text = "Player " + activePlayer + "Wins!"; }
+        //        //UpdDisplay();
+        //    }
+        //}
 
         void mockCDrop(int col)
         {
@@ -299,13 +279,19 @@ namespace fExSandbox
 
             for (int j = 6; j > 0; j--)
             {
-                i = x + (y * 7);
-                if (nodes[i].player == 0)
+                try
                 {
-                    yell("yoop");
-                    nodes[i].player = activePlayer; //update player ownership
-                    nodes[i].button.BackgroundImage = Faces[activePlayer];  //update button image
-                    break;
+                    i = (j * 6);
+                    if (nodes[i].player == 0)
+                    {
+                        nodes[i].player = activePlayer; //update player ownership
+                        nodes[i].button.BackgroundImage = Faces[activePlayer];  //update button image
+                        break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //yell($"x:{x} y:{y} i:{i}\n");
                 }
                 y--;
             }
@@ -404,43 +390,10 @@ namespace fExSandbox
             return 0;
         }
 
-        private void col1Click(object sender, EventArgs e)
-        {
-            mockCDrop(1);
-        }
-        private void col2Click(object sender, EventArgs e)
-        {
-            mockCDrop(2);
-        }
-        private void col3Click(object sender, EventArgs e)
-        {
-            mockCDrop(3);
-        }
-        private void col4Click(object sender, EventArgs e)
-        {
-            mockCDrop(4);
-        }
 
-        private void chkAI_CheckedChanged(object sender, EventArgs e)
-        {
-            AI = chkAI.Checked;
-        }
+        private void chkAI_CheckedChanged(object sender, EventArgs e) { AI = chkAI.Checked; }
 
-        private void txtDisp_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void btnHoverCancel(object sender, EventArgs e)
-        {
-            Button button = (Button)sender;
-            button.BackColor = Color.Transparent;
-        }
+        private void btnClose_Click(object sender, EventArgs e) { Application.Exit(); }
 
         private void btnInfo_Click(object sender, EventArgs e)
         {

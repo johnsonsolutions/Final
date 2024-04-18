@@ -57,7 +57,6 @@ namespace fExSandbox
             btnNG.Text = "New Game";
             btnNG.UseVisualStyleBackColor = false;
             btnNG.Click += btnNG_Click;
-            btnNG.MouseHover += btnHoverCancel;
             // 
             // chkAI
             // 
@@ -90,7 +89,6 @@ namespace fExSandbox
             btnClose.Text = "Close";
             btnClose.UseVisualStyleBackColor = false;
             btnClose.Click += btnClose_Click;
-            btnClose.MouseHover += btnHoverCancel;
             // 
             // txtDisp
             // 
@@ -142,7 +140,6 @@ namespace fExSandbox
             StartPosition = FormStartPosition.CenterScreen;
             Text = " ";
             TransparencyKey = Color.IndianRed;
-            Load += Connect4_Load;
             ResumeLayout(false);
             PerformLayout();
         }
