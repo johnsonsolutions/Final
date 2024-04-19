@@ -29,28 +29,22 @@ namespace fExSandbox
         public Connect4()
         {
             InitializeComponent();
-            initMoveset();
+            /*Event Handlers*/
+            //Drop += mockCDrop;
+            Drop += mockCDrop;
 
             //InitNodes();
             mockNodes();
-        }
-        public void initMoveset()
-        {
-            Drop += mockCDrop;
+            nodeTest();
+
         }
 
-        /// <summary>
-        /// Test Grid generation
-        /// </summary>
-        void gridTest()
-        {
-            Button[] nGrid = newGrid();
-
-            for (int i = 0; i < 42; i++)
-            {
-                this.Controls.Add(nGrid[i]);
+        void nodeTest() {
+            for (int i = 0; i < nodes.Length; i++) {
+                yell($"Node {i}: ({nodes[i].x}, {nodes[i].y})");
             }
         }
+
         /// <summary>
         /// Generates spaced-out button locations
         /// </summary>
@@ -135,6 +129,7 @@ namespace fExSandbox
                 for (int y = 0; y < 6; y++)
                 {
                     string btnName = "btn" + y.ToString() + x.ToString();
+                    yell(btnName);
                     Button button = newBtn(btnName);
                     button.Location = gridScale[i];
 
@@ -273,28 +268,32 @@ namespace fExSandbox
 
         void mockCDrop(int col)
         {
-            int i = 0;
-            int x = col;
-            int y = 6;
+            yell($"input: {col}");
+            int ind;
+            Point cord = new Point(col, 5);
 
-            for (int j = 6; j > 0; j--)
-            {
-                try
+            for (int i = cord.Y; i >= 0; i--) {
+                ind = GetInd(nodes, cord.X, cord.Y);
+                if (nodes[i].player == 0)
                 {
-                    i = (j * 6);
-                    if (nodes[i].player == 0)
-                    {
-                        nodes[i].player = activePlayer; //update player ownership
-                        nodes[i].button.BackgroundImage = Faces[activePlayer];  //update button image
-                        break;
-                    }
+                    nodes[i].player = activePlayer;
+                    nodes[i].button.BackgroundImage = Faces[nodes[i].player];
+                    return;
                 }
-                catch (Exception ex)
-                {
-                    //yell($"x:{x} y:{y} i:{i}\n");
-                }
-                y--;
             }
+        }
+
+        public static int GetInd(Node[] ns, int x, int y)
+        {
+            for (int i = 0; i < ns.Length; i++)
+            {
+                if (ns[i].x == x && ns[i].y == y)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
         }
 
         /// <summary>
@@ -369,14 +368,14 @@ namespace fExSandbox
             condition[9].Add(2, 0);
             condition[9].Add(3, 0);
 
-            foreach (WinCondition c in condition)
-            {
-                if (c.Confirmed(player, Slots))
-                {
-                    oP = true;
-                    break;
-                }
-            }
+            //foreach (WinCondition c in condition)
+            //{
+            //    if (c.Confirmed(player, Slots))
+            //    {
+            //        oP = true;
+            //        break;
+            //    }
+            //}
             return oP;
         }
         /// <summary>

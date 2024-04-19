@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace fExSandbox
 {
-    internal class Node
+    public class Node
     {
         // basic node information
         public string name;
@@ -48,6 +48,8 @@ namespace fExSandbox
             //Data = data;
             //Children = new List<Node<T>>();
         }
+
+
        /* public void AddChild(Node child)
         {
             Children.Add(child);
