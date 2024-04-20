@@ -48,9 +48,9 @@ namespace fExSandbox
             //Data = data;
             //Children = new List<Node<T>>();
         }
-        public static int Find(Node[] ns, Point loc)
+        public static int Find(List<Node> ns, Point loc)
         {
-            for (int i = 0; i < ns.Length; i++)
+            for (int i = 0; i < ns.Count; i++)
             {
                 if (ns[i].x == loc.X && ns[i].y == loc.Y)
                 {

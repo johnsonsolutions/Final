@@ -14,7 +14,9 @@ namespace fExSandbox
         /*Data*/
         //Current player's turn
         int activePlayer = 1;
-        Node[] nodes = new Node[42];
+        //Node[] nodes = new Node[42];
+        List<Node> nodes = new List<Node>();
+
 
         //Event Handling
         public delegate void dropHandler(Point loc);
@@ -41,7 +43,7 @@ namespace fExSandbox
 
         void nodeTest()
         {
-            for (int i = 0; i < nodes.Length; i++)
+            for (int i = 0; i < nodes.Count; i++)
             {
                 yell($"Node {i}:\n - Location: ({nodes[i].x}, {nodes[i].y})");
             }
@@ -124,7 +126,8 @@ namespace fExSandbox
                     button.Click += (sender, e) => { Drop?.Invoke(new Point(nLoc.X, nLoc.Y)); };
 
                     Node node = new Node(x, y, button);
-                    nodes[i] = node;
+                    //nodes[i] = node;
+                    nodes.Add(node);
                     this.Controls.Add(nodes[i].button);
 
                     i++;
@@ -200,10 +203,11 @@ namespace fExSandbox
         /// **Currently needs to be updated for new buttons**
         void ResetAllBtns()
         {
-            for (int i = 0; i <= nodes.Length; i++)
-            {
-                RmvBtn(nodes[i].button);
+            foreach (Node n in nodes) {
+                this.Controls.Remove(n.button);
             }
+            nodes = new List<Node>();
+            mockNodes();
         }
         /// <summary>
         /// Switch between players
