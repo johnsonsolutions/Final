@@ -17,7 +17,7 @@ namespace fExSandbox
         Node[] nodes = new Node[42];
 
         //Event Handling
-        public delegate void dropHandler(int col);
+        public delegate void dropHandler(Point loc);
         public event dropHandler? Drop;
 
         /*UI*/
@@ -31,17 +31,19 @@ namespace fExSandbox
             InitializeComponent();
             /*Event Handlers*/
             //Drop += mockCDrop;
-            Drop += mockCDrop;
+            Drop += ColDrop;
 
             //InitNodes();
             mockNodes();
-            nodeTest();
-
+            //nodeTest();
+            //grabMe();
         }
 
-        void nodeTest() {
-            for (int i = 0; i < nodes.Length; i++) {
-                yell($"Node {i}: ({nodes[i].x}, {nodes[i].y})");
+        void nodeTest()
+        {
+            for (int i = 0; i < nodes.Length; i++)
+            {
+                yell($"Node {i}:\n - Location: ({nodes[i].x}, {nodes[i].y})");
             }
         }
 
@@ -90,22 +92,8 @@ namespace fExSandbox
             return spawn;
         }
 
-        public Button[] newGrid()
-        {
-            List<Button> grid = new List<Button>();
-
-            for (int i = 0; i < 42; i++)
-            {
-                Button spawn = newBtn("btn" + i);
-                spawn.Location = gridScale[i];
-                grid.Add(spawn);
-            }
-
-            return grid.ToArray();
-        }
-
         /// <summary>
-        /// Print a string to the display
+        /// Print a string to the display/output
         /// </summary>
         /// <param name="inp">Input string</param>
         public void yell(string inp)
@@ -129,11 +117,11 @@ namespace fExSandbox
                 for (int y = 0; y < 6; y++)
                 {
                     string btnName = "btn" + y.ToString() + x.ToString();
-                    yell(btnName);
                     Button button = newBtn(btnName);
                     button.Location = gridScale[i];
 
-                    button.Click += (sender, e) => { Drop?.Invoke(x); };
+                    Point nLoc = new Point(x, y);
+                    button.Click += (sender, e) => { Drop?.Invoke(new Point(nLoc.X, nLoc.Y)); };
 
                     Node node = new Node(x, y, button);
                     nodes[i] = node;
@@ -238,62 +226,24 @@ namespace fExSandbox
         /// Drops the activePlayers' peice into the board in a specified column.
         /// </summary>
         /// <param name="column"></param>
-        //void ColDrop(int column)
-        //{
-        //    if (Winner() == 0)
-        //    {
-        //        int aCol = column - 1;
-
-        //        for (int i = 3; i >= 0; i--)
-        //        {
-        //            if (Slots[i, aCol] > 0)
-        //            {
-        //                txtDisp.Text += "-filled-";
-        //            }
-        //            else
-        //            {
-        //                Slots[i, aCol] = activePlayer;
-        //                break;
-        //            }
-        //        }
-        //        if (!isWinner(activePlayer))
-        //        {
-        //            playerTog();
-        //            txtDisp.Text = "Player " + activePlayer + "s Turn!";
-        //        }
-        //        else { txtDisp.Text = "Player " + activePlayer + "Wins!"; }
-        //        //UpdDisplay();
-        //    }
-        //}
-
-        void mockCDrop(int col)
+        void ColDrop(Point loc)
         {
-            yell($"input: {col}");
-            int ind;
-            Point cord = new Point(col, 5);
-
-            for (int i = cord.Y; i >= 0; i--) {
-                ind = GetInd(nodes, cord.X, cord.Y);
-                if (nodes[i].player == 0)
-                {
-                    nodes[i].player = activePlayer;
-                    nodes[i].button.BackgroundImage = Faces[nodes[i].player];
-                    return;
-                }
-            }
-        }
-
-        public static int GetInd(Node[] ns, int x, int y)
-        {
-            for (int i = 0; i < ns.Length; i++)
+            if (AI && activePlayer == 2) { }
+            else
             {
-                if (ns[i].x == x && ns[i].y == y)
+                int ind;
+                for (int i = 5; i >= 0; i--)
                 {
-                    return i;
+                    ind = Node.Find(nodes, new Point(loc.X, i));
+                    if (nodes[ind].player == 0)
+                    {
+                        nodes[ind].player = activePlayer;
+                        nodes[ind].button.BackgroundImage = Faces[activePlayer];
+                        playerTog();
+                        return;
+                    }
                 }
             }
-
-            return -1;
         }
 
         /// <summary>
@@ -394,11 +344,6 @@ namespace fExSandbox
 
         private void btnClose_Click(object sender, EventArgs e) { Application.Exit(); }
 
-        private void btnInfo_Click(object sender, EventArgs e)
-        {
-            Form abt = new abtBox();
-            abt.ShowDialog();
-        }
     }
 
     public class WinCondition

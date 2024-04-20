@@ -48,12 +48,23 @@ namespace fExSandbox
             //Data = data;
             //Children = new List<Node<T>>();
         }
-
-
-       /* public void AddChild(Node child)
+        public static int Find(Node[] ns, Point loc)
         {
-            Children.Add(child);
-        }*/
+            for (int i = 0; i < ns.Length; i++)
+            {
+                if (ns[i].x == loc.X && ns[i].y == loc.Y)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        /* public void AddChild(Node child)
+         {
+             Children.Add(child);
+         }*/
 
         /// <summary>
         /// Traverse Tree
@@ -89,10 +100,10 @@ namespace fExSandbox
         }*/
 
 
-       /*public void RemoveNode<T>(Node<T> node, Node<T> DeadNode)
-        {
-            node.Children.Remove(DeadNode);
-        }*/
+        /*public void RemoveNode<T>(Node<T> node, Node<T> DeadNode)
+         {
+             node.Children.Remove(DeadNode);
+         }*/
 
         /*public float MiniMax<T>(Node<T> node, int depth, bool maximizingPlayer)
         {
