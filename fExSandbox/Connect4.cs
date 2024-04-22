@@ -1,6 +1,7 @@
 ﻿using fExSandbox.Properties;
 using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
+using System.Xml.Linq;
 
 namespace fExSandbox
 {
@@ -16,6 +17,8 @@ namespace fExSandbox
         int activePlayer = 1;
         //Node[] nodes = new Node[42];
         List<Node> nodes = new List<Node>();
+        // possible winning nodes
+        List<Node> winNodes = new List<Node>();
 
 
         //Event Handling
@@ -243,6 +246,7 @@ namespace fExSandbox
                     {
                         nodes[ind].player = activePlayer;
                         nodes[ind].button.BackgroundImage = Faces[activePlayer];
+                        CheckWinner(nodes[ind]);
                         playerTog();
                         return;
                     }
@@ -347,6 +351,234 @@ namespace fExSandbox
         private void chkAI_CheckedChanged(object sender, EventArgs e) { AI = chkAI.Checked; }
 
         private void btnClose_Click(object sender, EventArgs e) { Application.Exit(); }
+
+        public void CheckWinner(Node node)
+        {
+            CheckVertical(node);
+            CheckHorizontal(node);
+            CheckPosDiagonal(node);
+            CheckNegDiagonal(node);
+        }
+
+        public void CheckVertical(Node node)
+        {
+            //Create list of possible winning nodes and add the dropped piece
+            winNodes.Add(node);
+
+            ///Check node north of current node, and all nodes above that
+            CheckNorth(node);
+            CheckSouth(node);
+        
+            if(winNodes.Count >= 4)
+            {
+                /// winner is active player
+                Application.Exit();
+            }
+            else
+            {
+                //clear list if theres no winner
+                winNodes.Clear();
+            }
+
+        }
+
+        public void CheckNorth(Node node)
+        {
+            foreach (Node n in nodes)
+            {
+                if (n.x == node.x && n.y == node.y + 1)
+                {
+                    //check if it is the same color
+                    if (n.button.BackgroundImage == Faces[activePlayer])
+                    {
+                        //add to possible winning nodes and check that piece
+                        winNodes.Add(n);
+                        CheckNorth(n);
+                    }
+                }
+            }
+        }
+        public void CheckSouth(Node node) 
+        {
+            foreach (Node n in nodes)
+            {
+                if (n.x == node.x && n.y == node.y - 1)
+                {
+                    //check if it is the same color
+                    if (n.button.BackgroundImage == Faces[activePlayer])
+                    {
+                        //add to possible winning nodes and check that piece
+                        winNodes.Add(n);
+                        CheckSouth(n);
+                    }
+                }
+            }
+        }
+
+        public void CheckHorizontal(Node node)
+        {
+            //Create list of possible winning nodes and add the dropped piece
+            winNodes.Add(node);
+
+            ///Check nodes west and east of current node
+            CheckWest(node);
+            CheckEast(node);
+
+            if (winNodes.Count >= 4)
+            {
+                /// winner is active player
+                Application.Exit();
+            }
+            else
+            {
+                //clear list if theres no winner
+                winNodes.Clear();
+            }
+        }
+
+        public void CheckWest(Node node)
+        {
+            foreach (Node n in nodes)
+            {
+                if (n.x == node.x -1 && n.y == node.y)
+                {
+                    //check if it is the same color
+                    if (n.button.BackgroundImage == Faces[activePlayer])
+                    {
+                        //add to possible winning nodes and check that piece
+                        winNodes.Add(n);
+                        CheckWest(n);
+                    }
+                }
+            }
+        }
+
+        public void CheckEast(Node node)
+        {
+            foreach (Node n in nodes)
+            {
+                if (n.x == node.x + 1 && n.y == node.y)
+                {
+                    //check if it is the same color
+                    if (n.button.BackgroundImage == Faces[activePlayer])
+                    {
+                        //add to possible winning nodes and check that piece
+                        winNodes.Add(n);
+                        CheckEast(n);
+                    }
+                }
+            }
+        }
+
+        public void CheckPosDiagonal(Node node)
+        {
+            //Create list of possible winning nodes and add the dropped piece
+            winNodes.Add(node);
+
+            ///Check nodes west and east of current node
+            CheckNorthEast(node);
+            CheckSouthWest(node);
+
+            if (winNodes.Count >= 4)
+            {
+                /// winner is active player
+                Application.Exit();
+            }
+            else
+            {
+                //clear list if theres no winner
+                winNodes.Clear();
+            }
+        }
+
+        public void CheckNorthEast(Node node)
+        {
+            foreach (Node n in nodes)
+            {
+                if (n.x == node.x + 1 && n.y == node.y + 1)
+                {
+                    //check if it is the same color
+                    if (n.button.BackgroundImage == Faces[activePlayer])
+                    {
+                        //add to possible winning nodes and check that piece
+                        winNodes.Add(n);
+                        CheckNorthEast(n);
+                    }
+                }
+            }
+        }
+
+        public void CheckSouthWest(Node node)
+        {
+            foreach (Node n in nodes)
+            {
+                if (n.x == node.x - 1 && n.y == node.y - 1)
+                {
+                    //check if it is the same color
+                    if (n.button.BackgroundImage == Faces[activePlayer])
+                    {
+                        //add to possible winning nodes and check that piece
+                        winNodes.Add(n);
+                        CheckSouthWest(n);
+                    }
+                }
+            }
+        }
+
+        public void CheckNegDiagonal(Node node)
+        {
+            //Create list of possible winning nodes and add the dropped piece
+            winNodes.Add(node);
+
+            ///Check nodes west and east of current node
+            CheckNorthWest(node);
+            CheckSouthEast(node);
+
+            if (winNodes.Count >= 4)
+            {
+                // winner is active player
+                Application.Exit();
+            }
+            else
+            {
+                //clear list if theres no winner
+                winNodes.Clear();
+            }
+        }
+
+        public void CheckNorthWest(Node node)
+        {
+            foreach (Node n in nodes)
+            {
+                if (n.x == node.x - 1 && n.y == node.y + 1)
+                {
+                    //check if it is the same color
+                    if (n.button.BackgroundImage == Faces[activePlayer])
+                    {
+                        //add to possible winning nodes and check that piece
+                        winNodes.Add(n);
+                        CheckNorthWest(n);
+                    }
+                }
+            }
+        }
+
+        public void CheckSouthEast(Node node)
+        {
+            foreach (Node n in nodes)
+            {
+                if (n.x == node.x + 1 && n.y == node.y - 1)
+                {
+                    //check if it is the same color
+                    if (n.button.BackgroundImage == Faces[activePlayer])
+                    {
+                        //add to possible winning nodes and check that piece
+                        winNodes.Add(n);
+                        CheckSouthEast(n);
+                    }
+                }
+            }
+        }
 
     }
 

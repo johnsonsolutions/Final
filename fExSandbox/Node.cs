@@ -17,19 +17,6 @@ namespace fExSandbox
         public Button button;
         public int player;
 
-        /* Neighboring nodes
-            naming convention uses cardinal direction of the node in reference to the current node
-            with a lower case inital (n is North, w is West, etc..) (North or South take precendence over
-            east or west (for example: North West is nwNeighbor not wnNeighbor)*/
-        Node nNeighbor;
-        Node neNeighbor;
-        Node eNeighbor;
-        Node seNeighbor;
-        Node sNeighbor;
-        Node swNeighbor;
-        Node wNeighbor;
-        Node nwNeighbor;
-
 
         //public  Data { get; set; }
        /// public List<Node> Children { get; set; }
@@ -43,6 +30,7 @@ namespace fExSandbox
         {
             this.x = x;
             this.y = y;
+            //this.coordinates[x, y] = x;
             this.button = button;
             //this.button = Connect4.GetButton();
             //Data = data;
@@ -60,6 +48,8 @@ namespace fExSandbox
 
             return -1;
         }
+
+
 
         /* public void AddChild(Node child)
          {
