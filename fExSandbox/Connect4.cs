@@ -1,4 +1,5 @@
 ﻿using fExSandbox.Properties;
+using Microsoft.VisualBasic.Logging;
 using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
@@ -9,6 +10,7 @@ namespace fExSandbox
     {
         /*Preferences*/
         public bool AI = false;
+        public int AICol;
         //Images for player pieces in order [Empty, Player 1, Player 2]
         Bitmap[] Faces = new Bitmap[3] { Properties.Resources.t1_01, Properties.Resources.t2_01, Properties.Resources.t3_01 };
 
@@ -210,6 +212,7 @@ namespace fExSandbox
                 this.Controls.Remove(n.button);
             }
             nodes = new List<Node>();
+            activePlayer = 1;
             mockNodes();
         }
         /// <summary>
@@ -235,7 +238,23 @@ namespace fExSandbox
         /// <param name="column"></param>
         void ColDrop(Point loc)
         {
-            if (AI && activePlayer == 2) { }
+            if (AI )//&& activePlayer == 2)
+            {
+                //algorithmCol(AICol);
+                int ind;
+                for (int i = 5; i >= 0; i--)
+                {
+                    ind = Node.Find(nodes, new Point(loc.X, i));
+                    if (nodes[ind].player == 0)
+                    {
+                        nodes[ind].player = activePlayer;
+                        nodes[ind].button.BackgroundImage = Faces[activePlayer];
+                        CheckWinner(nodes[ind]);
+                        AITurn();
+                        return;
+                    }
+                }
+            }
             else
             {
                 int ind;
@@ -251,6 +270,44 @@ namespace fExSandbox
                         return;
                     }
                 }
+            }
+        }
+
+        void AITurn()
+        {
+            if (activePlayer == 1)
+            {
+                playerTog();
+                
+
+                algorithmCol();
+
+                
+                int ind;
+                for (int i = 5; i >= 0; i--)
+                {
+                    ind = Node.Find(nodes, new Point(AICol, i));
+                    if (nodes[ind].player == 0)
+                    {
+                        nodes[ind].player = activePlayer;
+                        nodes[ind].button.BackgroundImage = Faces[activePlayer];
+                        CheckWinner(nodes[ind]);
+                        playerTog();
+                        return;
+                    }
+                }
+            }
+            
+        }
+        public void algorithmCol() 
+        {
+            if (AICol < 6)          //if-else statement is temp for testing
+            {
+                AICol = AICol + 1;
+            }
+            else
+            {
+                AICol = 0;
             }
         }
 
