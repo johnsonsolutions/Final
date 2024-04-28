@@ -429,7 +429,9 @@ namespace fExSandbox
             if(winNodes.Count >= 4)
             {
                 /// winner is active player
-                Application.Exit();
+                MessageBox.Show("Player " + activePlayer + " Wins!", "Winner");
+                winNodes.Clear();
+                ResetAllBtns();
             }
             else
             {
@@ -484,7 +486,9 @@ namespace fExSandbox
             if (winNodes.Count >= 4)
             {
                 /// winner is active player
-                Application.Exit();
+                MessageBox.Show("Player " + activePlayer + " Wins!", "Winner");
+                winNodes.Clear();
+                ResetAllBtns();
             }
             else
             {
@@ -538,8 +542,9 @@ namespace fExSandbox
 
             if (winNodes.Count >= 4)
             {
-                /// winner is active player
-                Application.Exit();
+                MessageBox.Show("Player " + activePlayer + " Wins!", "Winner");
+                winNodes.Clear();
+                ResetAllBtns();
             }
             else
             {
@@ -593,8 +598,9 @@ namespace fExSandbox
 
             if (winNodes.Count >= 4)
             {
-                // winner is active player
-                Application.Exit();
+                MessageBox.Show("Player " + activePlayer + " Wins!", "Winner");
+                winNodes.Clear();
+                ResetAllBtns();
             }
             else
             {
