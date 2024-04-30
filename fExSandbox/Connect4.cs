@@ -643,6 +643,36 @@ namespace fExSandbox
             }
         }
 
+        public void ScorePositions(Node piece)
+        {
+            int score = 0;
+
+            // score center column
+            // create a list of nodes in center column
+            List<Node> centerColumn = new List<Node>();
+            //check which nodes are empty
+            int ind = activePlayer;
+            for (int i = 5; i >= 0; i--)
+            {
+                
+                if (nodes[ind].player == piece.player)
+                {
+                    centerColumn.Add(nodes[ind]);
+                    return;
+                }
+            }
+            //increase score
+            score += centerColumn.Count * 3;
+
+            //score horiz
+            // score vertical
+            // score positive diagonals
+            //score negative diagonals
+
+        }
+
+
+
     }
 
     public class WinCondition

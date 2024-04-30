@@ -16,6 +16,7 @@ namespace fExSandbox
         public int y;
         public Button button;
         public int player;
+        public List<Node> children;
 
 
         //public  Data { get; set; }
@@ -34,7 +35,7 @@ namespace fExSandbox
             this.button = button;
             //this.button = Connect4.GetButton();
             //Data = data;
-            //Children = new List<Node<T>>();
+            List<Node> children = new List<Node>();
         }
         public static int Find(List<Node> ns, Point loc)
         {
@@ -95,7 +96,8 @@ namespace fExSandbox
              node.Children.Remove(DeadNode);
          }*/
 
-        /*public float MiniMax<T>(Node<T> node, int depth, bool maximizingPlayer)
+        /*
+        public float MiniMax<T>(Node node, int depth, bool maximizingPlayer)
         {
             if (depth == 0 || isTerminal())
             {
@@ -105,7 +107,7 @@ namespace fExSandbox
             if (maximizingPlayer)
             {
                 float weight = 0;
-                foreach (Node<T> child in node.Children)
+                foreach (Node child in node.children)
                 {
                     weight = Math.Max(weight, MiniMax(child, depth - 1, false));
                 }
@@ -114,12 +116,12 @@ namespace fExSandbox
             else
             {
                 float weight = 0;
-                foreach (Node<T> child in node.Children)
+                foreach (Node child in node.children)
                 {
                     weight = Math.Min(weight, MiniMax(child, depth - 1, true));
                 }
                 return weight;
-            }*/
-        //}
+            }
+        }*/
     }
 }
