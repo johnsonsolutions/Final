@@ -241,6 +241,7 @@ namespace fExSandbox
             if (AI )//&& activePlayer == 2)
             {
                 //algorithmCol(AICol);
+                activePlayer = 1;
                 int ind;
                 for (int i = 5; i >= 0; i--)
                 {
@@ -250,7 +251,8 @@ namespace fExSandbox
                         nodes[ind].player = activePlayer;
                         nodes[ind].button.BackgroundImage = Faces[activePlayer];
                         CheckWinner(nodes[ind]);
-                        AITurn();
+                        Console.Write(loc.X);
+                        AITurn(loc.X);
                         return;
                     }
                 }
@@ -273,14 +275,14 @@ namespace fExSandbox
             }
         }
 
-        void AITurn()
+        void AITurn(int loc)
         {
             if (activePlayer == 1)
             {
                 playerTog();
                 
 
-                algorithmCol();
+                algorithmCol(loc);
 
                 
                 int ind;
@@ -299,15 +301,36 @@ namespace fExSandbox
             }
             
         }
-        public void algorithmCol() 
+        public void algorithmCol(int loc) 
         {
-            if (AICol < 6)          //if-else statement is temp for testing
+            //if-else statement is temp for testing
+            if (loc == 0)
             {
-                AICol = AICol + 1;
+                AICol = 1;
             }
-            else
+            if (loc == 1)
             {
                 AICol = 0;
+            }
+            if (loc == 2)
+            {
+                AICol = 3;
+            }
+            if (loc == 3)
+            {
+                AICol = 2;
+            }
+            if (loc == 4)
+            {
+                AICol = 5;
+            }
+            if (loc == 5)
+            {
+                AICol = 4;
+            }
+            if (loc == 6)
+            {
+                AICol = 6;
             }
         }
 
@@ -405,7 +428,11 @@ namespace fExSandbox
         }
 
 
-        private void chkAI_CheckedChanged(object sender, EventArgs e) { AI = chkAI.Checked; }
+        private void chkAI_CheckedChanged(object sender, EventArgs e) 
+        { 
+            ResetAllBtns();
+            AI = chkAI.Checked; 
+        }
 
         private void btnClose_Click(object sender, EventArgs e) { Application.Exit(); }
 
