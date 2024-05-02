@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace fExSandbox
 {
-    public class Node
+    public class Slot
     {
         // basic node information
         public string name;
@@ -17,6 +17,7 @@ namespace fExSandbox
         public Button button;
         public int player;
 
+        public List<Slot> winNodes;
 
         //public  Data { get; set; }
        /// public List<Node> Children { get; set; }
@@ -26,7 +27,7 @@ namespace fExSandbox
 
        /// public bool isTerminal() { return Children.Count < 1; }
 
-        public Node(int x,int y, Button button)
+        public Slot(int x,int y, Button button)
         {
             this.x = x;
             this.y = y;
@@ -36,7 +37,7 @@ namespace fExSandbox
             //Data = data;
             //Children = new List<Node<T>>();
         }
-        public static int Find(List<Node> ns, Point loc)
+        public static int Find(List<Slot> ns, Point loc)
         {
             for (int i = 0; i < ns.Count; i++)
             {
@@ -48,6 +49,227 @@ namespace fExSandbox
 
             return -1;
         }
+
+        public void CheckVertical(Slot slot, Node gameState)
+        {
+            //Create list of possible winning nodes and add the dropped piece
+            gameState.winNodes.Add(slot);
+
+            ///Check node north of current node, and all nodes above that
+            slot.CheckNorth(slot, gameState);
+            slot.CheckSouth(slot, gameState);
+
+            if (gameState.winNodes.Count >= 4)
+            {
+                /// winner is active player
+                Application.Exit();
+            }
+            else
+            {
+                //clear list if theres no winner
+                gameState.winNodes.Clear();
+            }
+
+        }
+
+        public void CheckNorth(Slot slot, Node gameState)
+        {
+            foreach (Slot n in gameState.state)
+            {
+                if (n.x == slot.x && n.y == slot.y + 1)
+                {
+                    //check if it is the same color
+                    if (n.player == slot.player)
+                    {
+                        //add to possible winning nodes and check that piece
+                        gameState.winNodes.Add(n);
+                        slot.CheckNorth(n, gameState);
+                    }
+                }
+            }
+        }
+        public void CheckSouth(Slot slot, Node gameState)
+        {
+            foreach (Slot n in gameState.state)
+            {
+                if (n.x == slot.x && n.y == slot.y - 1)
+                {
+                    //check if it is the same color
+                    if (n.player == slot.player)
+                    {
+                        //add to possible winning nodes and check that piece
+                        gameState.winNodes.Add(n);
+                        slot.CheckSouth(n, gameState);
+                    }
+                }
+            }
+        }
+
+        public void CheckHorizontal(Slot slot, Node gameState)
+        {
+            //Create list of possible winning nodes and add the dropped piece
+            gameState.winNodes.Add(slot);
+
+            ///Check nodes west and east of current node
+            slot.CheckWest(slot, gameState);
+            slot.CheckEast(slot, gameState);
+
+            if (gameState.winNodes.Count >= 4)
+            {
+                /// winner is active player
+                Application.Exit();
+            }
+            else
+            {
+                //clear list if theres no winner
+                gameState.winNodes.Clear();
+            }
+        }
+
+        public void CheckWest(Slot slot, Node gameState)
+        {
+            foreach (Slot n in gameState.state)
+            {
+                if (n.x == slot.x - 1 && n.y == slot.y)
+                {
+                    //check if it is the same color
+                    if (n.player == slot.player)
+                    {
+                        //add to possible winning nodes and check that piece
+                        gameState.winNodes.Add(n);
+                        slot.CheckWest(n, gameState);
+                    }
+                }
+            }
+        }
+
+        public void CheckEast(Slot slot, Node gameState)
+        {
+            foreach (Slot n in gameState.state)
+            {
+                if (n.x == slot.x + 1 && n.y == slot.y)
+                {
+                    //check if it is the same color
+                    if (n.player == slot.player)
+                    {
+                        //add to possible winning nodes and check that piece
+                        gameState.winNodes.Add(n);
+                        slot.CheckEast(n, gameState);
+                    }
+                }
+            }
+        }
+
+        public void CheckPosDiagonal(Slot slot, Node gameState)
+        {
+            //Create list of possible winning nodes and add the dropped piece
+            gameState.winNodes.Add(slot);
+
+            ///Check nodes west and east of current node
+            slot.CheckNorthEast(slot, gameState);
+            slot.CheckSouthWest(slot, gameState);
+
+            if (gameState.winNodes.Count >= 4)
+            {
+                /// winner is active player
+                Application.Exit();
+            }
+            else
+            {
+                //clear list if theres no winner
+                gameState.winNodes.Clear();
+            }
+        }
+
+        public void CheckNorthEast(Slot slot, Node gameState)
+        {
+            foreach (Slot n in gameState.state)
+            {
+                if (n.x == slot.x + 1 && n.y == slot.y + 1)
+                {
+                    //check if it is the same color
+                    if (n.player == slot.player)
+                    {
+                        //add to possible winning nodes and check that piece
+                        gameState.winNodes.Add(n);
+                        CheckNorthEast(n, gameState);
+                    }
+                }
+            }
+        }
+
+        public void CheckSouthWest(Slot slot, Node gameState)
+        {
+            foreach (Slot n in gameState.state)
+            {
+                if (n.x == slot.x - 1 && n.y == slot.y - 1)
+                {
+                    //check if it is the same color
+                    if (n.player == slot.player)
+                    {
+                        //add to possible winning nodes and check that piece
+                        gameState.winNodes.Add(n);
+                        slot.CheckSouthWest(n, gameState);
+                    }
+                }
+            }
+        }
+
+        public void CheckNegDiagonal(Slot slot, Node gameState)
+        {
+            //Create list of possible winning nodes and add the dropped piece
+            gameState.winNodes.Add(slot);
+
+            ///Check nodes west and east of current node
+            slot.CheckNorthWest(slot, gameState);
+            slot.CheckSouthEast(slot, gameState);
+
+            if (gameState.winNodes.Count >= 4)
+            {
+                // winner is active player
+                Application.Exit();
+            }
+            else
+            {
+                //clear list if theres no winner
+                gameState.winNodes.Clear();
+            }
+        }
+
+        public void CheckNorthWest(Slot slot, Node gameState)
+        {
+            foreach (Slot n in gameState.state)
+            {
+                if (n.x == slot.x - 1 && n.y == slot.y + 1)
+                {
+                    //check if it is the same color
+                    if (n.player == slot.player)
+                    {
+                        //add to possible winning nodes and check that piece
+                        gameState.winNodes.Add(n);
+                        slot.CheckNorthWest(n, gameState);
+                    }
+                }
+            }
+        }
+
+        public void CheckSouthEast(Slot slot, Node gameState)
+        {
+            foreach (Slot n in gameState.state)
+            {
+                if (n.x == slot.x + 1 && n.y == slot.y - 1)
+                {
+                    //check if it is the same color
+                    if (n.player == slot.player)
+                    {
+                        //add to possible winning nodes and check that piece
+                        gameState.winNodes.Add(n);
+                        slot.CheckSouthEast(n, gameState);
+                    }
+                }
+            }
+        }
+
 
 
 
@@ -121,5 +343,30 @@ namespace fExSandbox
                 return weight;
             }*/
         //}
+    }
+    public class Node {
+
+        public List<Slot> state = new List<Slot>();
+        public float impurity;
+        public float infoGain;
+        public List<Slot> winNodes;
+
+        public Node[] children = new Node[7];
+
+        public Node() { }
+        public Node(Slot[] slots) { 
+            foreach (Slot slot in slots) { state.Add(slot); }
+        }
+        public Node(List<Slot> slots) { state = slots; }
+
+
+        void EvalChildren() { 
+            for(int i = 0; i < children.Length; i++)
+            {
+                if (children[i] != null) { 
+                    
+                }
+            }
+        }
     }
 }
